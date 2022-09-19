@@ -1,22 +1,28 @@
 class SmartPhone:
+    def __init__(self,model,):
+        self.model=model
+        self.apps=[]
+
+    def add_app(self, app):
+        if len(tuple(filter(lambda x:type(x)==type(app),self.apps)))==0:
+            self.apps.append(app)
+
+    def remove_app(self, app):
+        if app in self.apps:
+            self.apps.remove(app)
+
+class AppVK:
     def __init__(self):
-        pass
+        self.name = "ВКонтакте"
+
+class AppYouTube:
+    def __init__(self,memory_max):
+        self.name = "YouTube"
+        self.memory_max=memory_max
+
+class AppPhone:
+    def __init__(self,phone_list):
+        self.name = "Phone"
+        self.phone_list=phone_list
 
 
-class Point:
-    def __init__(self,pt):
-        self.pt=pt
-
-    @property
-    def pt(self):
-        return self.__pt
-
-    @pt.setter
-    def pt(self,pt):
-        if type(pt)==int:
-            self.__pt=pt
-
-a=Point(10)
-a.pt=100
-
-print(a.pt)
