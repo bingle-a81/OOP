@@ -1,23 +1,16 @@
-from functools import reduce
+class ImageFileAcceptor:
+    def __init__(self,extensions):
+        self.extensions =extensions
 
-people = [{'имя': 'Маша', ' рост ': 160},
-    {'имя': 'Саша', ' рост ': 80},
-    {'name': 'Паша',' рост ': 80}]
+    def __call__(self, *args, **kwargs):
+        if len(self.extensions)>0:
+            return i.split('.')[-1] in self.extensions
 
-height_total = 0
-height_count = 0
-for person in people:
-    if ' рост ' in person:
-        height_total += person[' рост ']
-        height_count += 1
+fs = ["boat.jpg", "web.png", "text.txt", "python.doc", "ava.8.jpg", "forest.jpeg", "eq_1.png", "eq_2.png", "my.html", "data.shtml"]
+acceptor = ImageFileAcceptor(("jpg", "png"))
+res = filter(acceptor, fs)
+assert set(res) == set(["boat.jpg", "web.png", "ava.8.jpg", "eq_1.png", "eq_2.png"]), "с помощью объекта класса ImageFileAcceptor был сформирован неверный список файлов"
 
-if height_count > 0:
-    average_height = height_total / height_count
-
-print(average_height    )
-
-heights =list(map(lambda x: x[' рост '],filter(lambda e: ' рост ' in e, people)))
-print(heights)
-if len(heights) > 0:
-    average_height = sum(heights) / len(heights)
-print(average_height)
+acceptor = ImageFileAcceptor(("jpeg", "html"))
+res = filter(acceptor, fs)
+assert set(res) == set(["forest.jpeg", "my.html"]), "с помощью объекта класса ImageFileAcceptor был сформирован неверный список файлов"
