@@ -2,9 +2,9 @@ class ImageFileAcceptor:
     def __init__(self,extensions):
         self.extensions =extensions
 
-    def __call__(self, *args, **kwargs):
-        if len(self.extensions)>0:
-            return i.split('.')[-1] in self.extensions
+    def __call__(self, *args, **kwargs):        
+        return lambda x:(x.split('.')[-1] in self.extensions)
+        
 
 fs = ["boat.jpg", "web.png", "text.txt", "python.doc", "ava.8.jpg", "forest.jpeg", "eq_1.png", "eq_2.png", "my.html", "data.shtml"]
 acceptor = ImageFileAcceptor(("jpg", "png"))
