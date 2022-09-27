@@ -1,16 +1,20 @@
-class ImageFileAcceptor:
-    def __init__(self,extensions):
-        self.extensions =extensions
+class RenderList:
+    def __init__(self,type_list='ul'):
+        self.type_list=type_list
 
-    def __call__(self, *args, **kwargs):        
-        return lambda x:(x.split('.')[-1] in self.extensions)
-        
+    def __call__(self, *args, **kwargs):
+        if self.type_list.strip()=='ol':
+            a='ol'
+        else:
+            a='ul'
 
-fs = ["boat.jpg", "web.png", "text.txt", "python.doc", "ava.8.jpg", "forest.jpeg", "eq_1.png", "eq_2.png", "my.html", "data.shtml"]
-acceptor = ImageFileAcceptor(("jpg", "png"))
-res = filter(acceptor, fs)
-assert set(res) == set(["boat.jpg", "web.png", "ava.8.jpg", "eq_1.png", "eq_2.png"]), "с помощью объекта класса ImageFileAcceptor был сформирован неверный список файлов"
+        d=f'<{a}>\n'
+        for i in args[0]:
+            d+=f'<li>{i}</li>\n'
+        d+=f'/<{a}>\n'
+        return d
 
-acceptor = ImageFileAcceptor(("jpeg", "html"))
-res = filter(acceptor, fs)
-assert set(res) == set(["forest.jpeg", "my.html"]), "с помощью объекта класса ImageFileAcceptor был сформирован неверный список файлов"
+lst = ["Пункт меню 1", "Пункт меню 2", "Пункт меню 3"]
+render = RenderList('ol')
+html = render(lst)
+print(html)
