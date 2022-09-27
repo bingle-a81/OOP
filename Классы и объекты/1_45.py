@@ -1,20 +1,15 @@
-class RenderList:
-    def __init__(self,type_list='ul'):
-        self.type_list=type_list
+class Decorator:
+    def __init__(self, func):
+        self.__func = func
 
-    def __call__(self, *args, **kwargs):
-        if self.type_list.strip()=='ol':
-            a='ol'
-        else:
-            a='ul'
+    def __call__(self, x, y=1):
+        return self.__func(x) + y
 
-        d=f'<{a}>\n'
-        for i in args[0]:
-            d+=f'<li>{i}</li>\n'
-        d+=f'/<{a}>\n'
-        return d
 
-lst = ["Пункт меню 1", "Пункт меню 2", "Пункт меню 3"]
-render = RenderList('ol')
-html = render(lst)
-print(html)
+@Decorator
+def my_func(x):
+    return x
+
+print(type(my_func))
+a = my_func(10,11)  # Попробуйте добавить второй аргумент
+print(a)
