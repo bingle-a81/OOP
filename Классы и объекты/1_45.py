@@ -1,28 +1,18 @@
-class HandlerGET:
-    def __init__(self, func):
-        self.infunction = func
-    
-    def __call__(self, request, *args, **kwargs):
-        item = request.get("method","GET")
-        if not item or item != "GET":
-            return None
-        return self.get(self.infunction, request)
+class GentleGuy:
+    def __init__(self,method):
+        self.method=method
 
-    def get(self, func, request, *args, **kwargs):
-        print(func(request))
-        return f"GET: {func(request)}"
+    def __call__(self, func):
+        def wrapper(st:str):
+            if st in self.method:
+                return self.__getattribute__(st)(func)
+        return wrapper
 
+    def a(self,func):
+        print(f'zzzz ')
 
-@HandlerGET
-def index(request):
-    return "главная страница сайта"
+@GentleGuy(('a','b',))
+def ddd(a):
+    print('cccc')
 
-res = index({"method": "GET"})
-assert res == "GET: главная страница сайта", "декорированная функция вернула неверные данные"
-res = index({"method": "POST"})
-assert res is None, "декорированная функция вернула неверные данные"
-res = index({"method": "POST2"})
-assert res is None, "декорированная функция вернула неверные данные"
-
-res = index({})
-assert res == "GET: главная страница сайта", "декорированная функция вернула неверные данные"
+ddd('a')
