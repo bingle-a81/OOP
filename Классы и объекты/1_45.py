@@ -1,18 +1,34 @@
-class GentleGuy:
-    def __init__(self,method):
-        self.method=method
+def counter(start=0):
+    def step():
+        nonlocal start
+        start+=1
+        return start
+    return step
 
-    def __call__(self, func):
-        def wrapper(st:str):
-            if st in self.method:
-                return self.__getattribute__(st)(func)
+c1=counter()
+print(c1())
+print(c1())
+
+
+class Deco:
+    def __init__(self,param):
+        self.param=param
+
+    def __call__(self,func ):
+        self.func=func
+        def wrapper(*args, **kwds):
+            result=self.func(list(map(str,(i+self.param for i in args[0]))))
+            return result
         return wrapper
 
-    def a(self,func):
-        print(f'zzzz ')
+@Deco(3)
+def ff(x):
+    print(x)
 
-@GentleGuy(('a','b',))
-def ddd(a):
-    print('cccc')
+ff(range(10))
 
-ddd('a')
+# print(a)
+
+
+            
+
