@@ -1,15 +1,8 @@
-class Way:
-    def __init__(self, length):
-        self.length = length
-
-    def __add__(self, other):
-        return Way(self.length + other.length)
-
+class Book:
+    def __init__(self,title, author, year,):
+        self.title=title
+        self.author=author
+        self.year=year
 
 
-w1 = Way(5)
-w2 = Way(10)
-
-w = w1 + w2
-w1 += w2
-w = w1 + w2 + w1
+class
