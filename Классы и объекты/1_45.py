@@ -1,8 +1,7 @@
-class Book:
-    def __init__(self,title, author, year,):
-        self.title=title
-        self.author=author
-        self.year=year
+class Box3D:
+    def __init__(self,width, height, depth,):
+        self.width=width
+        self.height=height
+        self.depth=depth
 
-
-class
+        
