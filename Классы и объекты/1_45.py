@@ -1,46 +1,57 @@
-class Deco:
-    def __set_name__(self,owner,name):
-        self.name=f'_{owner.__name__}__{name}'
+import sys
+from collections import Counter
 
-    def __get__(self,owner,objtype):
-        return getattr(owner,self.name)
-    
-    def __set__(self,instance,value):
-        setattr(instance,self.name,value)
+class ShopItem:
+    def __init__(self, name, weight, price):
+        self.name = name
+        self.weight = weight
+        self.price = price
 
+    # def __repr__(self):
+    #     return f'{self.name} - {self.weight} - {self.price}'
 
-class Don:
-    start=Deco()
-    end=Deco()
-    def __init__(self,start=None,end=None) :
-        self.start=start
-        self.end=end
+    def __hash__(self):
+        return hash((self.name.lower(), self.weight, self.price))
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
 
-class Lst:
-    def __init__(self):
-        self.obj_nachalo=None
-        self.obj_konec=None
+# считывание списка из входного потока
+lst_in = ['Системный блок: 1500 75890.56',
+          'Монитор Samsung: 2000 34000',
+          'Клавиатура: 200.44 545',
+          'Монитор Samsung: 2000 34000']
 
-    def add(self,obj:Don):
-        if self.obj_konec:
-            self.obj_konec=obj.start
-        obj.end=self.obj_konec
-        self.obj_konec=obj
-        if not self.obj_nachalo:
-            self.obj_nachalo=obj
-        
+items = []
+for line in lst_in:
+    name, data = line.split(':')
+    weight, price = map(float, data.split())
+    items.append(ShopItem(name, weight, price))
+print(items)
 
-a1=Don()
-a2=Don()
-a3=Don()
-a4=Don()
-l=Lst()
-l.add(a1)
-print(l.n,l.f)
-l.add(a2)
-print(l.n,l.f)
-l.add(a3)
-print(l.n,l.f)
-l.add(a4)
-print(l.n,l.f)
+shop_items = {k: [k, v] for k, v in Counter(items).items()}
+# print(shop_items)
+
+it1 = ShopItem('name', 10, 11)
+it2 = ShopItem('name', 10, 11)
+assert hash(it1) == hash(it2), "разные хеши у равных объектов"
+
+it2 = ShopItem('name', 10, 12)
+assert hash(it1) != hash(it2), "равные хеши у разных объектов"
+
+it2 = ShopItem('name', 11, 11)
+assert hash(it1) != hash(it2), "равные хеши у разных объектов"
+
+it2 = ShopItem('NAME', 10, 11)
+assert hash(it1) == hash(it2), "разные хеши у равных объектов"
+
+name = lst_in[0].split(':')
+for sp in shop_items.values():
+    assert isinstance(sp[0], ShopItem) and type(sp[1]) == int, "в значениях словаря shop_items первый элемент должен быть объектом класса ShopItem, а второй - целым числом"
+
+v = list(shop_items.values())
+if v[0][0].name.strip() == "Системный блок":
+    assert v[0][1] == 1 and v[1][1] == 2 and v[2][1] == 1 and len(v) == 3, "неверные значения в словаре shop_items"
+
+if v[0][0].name.strip() == "X-box":
+    assert v[0][1] == 2 and v[1][1] == 1 and v[2][1] == 2 and len(v) == 3, "неверные значения в словаре shop_items"
