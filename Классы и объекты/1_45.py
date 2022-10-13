@@ -1,57 +1,56 @@
-import sys
-from collections import Counter
+from functools import reduce
+class Des:
+    def __set_name__(self, owner, name):
+        self.name= f'_{owner.__name__}__{name}'
+    def __get__(self, instance, owner):
+        return getattr(instance,self.name)
+    def __set__(self, instance, value):
+        if type(value) not in (int,float) or value<0:
+            raise ValueError("длины сторон треугольника должны быть положительными числами")
+        setattr(instance,self.name,value)
 
-class ShopItem:
-    def __init__(self, name, weight, price):
-        self.name = name
-        self.weight = weight
-        self.price = price
 
-    # def __repr__(self):
-    #     return f'{self.name} - {self.weight} - {self.price}'
+class Triangle:
+    a=Des()
+    b=Des()
+    c=Des()
+    def __init__(self,a, b, c):
+        self.a=a
+        self.b =b
+        self.c =c
+        if not self.__verify():
+            raise ValueError("с указанными длинами нельзя\
+                             образовать треугольник")
 
-    def __hash__(self):
-        return hash((self.name.lower(), self.weight, self.price))
+    def __verify(self):
+        a,b,c=self.a, self.b, self.c
+        return max(a,b,c) <reduce(lambda x, y: x + y, (a,b,c)) - max(a,b,c)
 
-    def __eq__(self, other):
-        return hash(self) == hash(other)
+    def __len__(self):
+        return int(self.a+self.b+self.c)
 
-# считывание списка из входного потока
-lst_in = ['Системный блок: 1500 75890.56',
-          'Монитор Samsung: 2000 34000',
-          'Клавиатура: 200.44 545',
-          'Монитор Samsung: 2000 34000']
+    def __call__(self, *args, **kwargs):
+        a, b, c = self.a, self.b, self.c
+        p=len(self)/2
+        return (p * (p-a) * (p-b) * (p-c))**0.5
 
-items = []
-for line in lst_in:
-    name, data = line.split(':')
-    weight, price = map(float, data.split())
-    items.append(ShopItem(name, weight, price))
-print(items)
+tr = Triangle(5, 4, 3)
+assert tr.a == 5 and tr.b == 4 and tr.c == 3, "дескрипторы вернули неверные значения"
 
-shop_items = {k: [k, v] for k, v in Counter(items).items()}
-# print(shop_items)
+try:
+    tr = Triangle(-5, 4, 3)
+except ValueError:
+    assert True
+else:
+    assert False, "не сгенерировалось исключение ValueError"
 
-it1 = ShopItem('name', 10, 11)
-it2 = ShopItem('name', 10, 11)
-assert hash(it1) == hash(it2), "разные хеши у равных объектов"
+try:
+    tr = Triangle(10, 1, 1)
+except ValueError:
+    assert True
+else:
+    assert False, "не сгенерировалось исключение ValueError"
 
-it2 = ShopItem('name', 10, 12)
-assert hash(it1) != hash(it2), "равные хеши у разных объектов"
-
-it2 = ShopItem('name', 11, 11)
-assert hash(it1) != hash(it2), "равные хеши у разных объектов"
-
-it2 = ShopItem('NAME', 10, 11)
-assert hash(it1) == hash(it2), "разные хеши у равных объектов"
-
-name = lst_in[0].split(':')
-for sp in shop_items.values():
-    assert isinstance(sp[0], ShopItem) and type(sp[1]) == int, "в значениях словаря shop_items первый элемент должен быть объектом класса ShopItem, а второй - целым числом"
-
-v = list(shop_items.values())
-if v[0][0].name.strip() == "Системный блок":
-    assert v[0][1] == 1 and v[1][1] == 2 and v[2][1] == 1 and len(v) == 3, "неверные значения в словаре shop_items"
-
-if v[0][0].name.strip() == "X-box":
-    assert v[0][1] == 2 and v[1][1] == 1 and v[2][1] == 2 and len(v) == 3, "неверные значения в словаре shop_items"
+tr = Triangle(5, 4, 3)
+assert len(tr) == 12, "функция len вернула неверное значение"
+assert 5.9 < tr() < 6.1, "метод __call__ вернул неверное значение"
