@@ -23,8 +23,8 @@ class Triangle:
                              образовать треугольник")
 
     def __verify(self):
-        a,b,c=self.a, self.b, self.c
-        return max(a,b,c) <reduce(lambda x, y: x + y, (a,b,c)) - max(a,b,c)
+        i=[self.a, self.b, self.c]
+        return max(i) <sum(i) - max(i)
 
     def __len__(self):
         return int(self.a+self.b+self.c)
