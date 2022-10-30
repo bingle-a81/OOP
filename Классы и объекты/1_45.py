@@ -8,21 +8,24 @@ class Bag:
     def __init__(self,max_weight) -> None:
         self.max_weight=max_weight
         self.things=[]
+        self.__weight=0
 
-    def __check_weight(self,vol):
-        a=sum(x.weight for x in self.things)
-        if (a+vol)>=self.max_weight:
+
+    def __check_weight(self,new_vol,old_vol=None):
+        w=self.__weight+new_vol.weight if old_vol is None else self.__weight+new_vol.weight-old_vol.weight
+        if w>self.max_weight:
             raise ValueError('превышен суммарный вес предметов')
-
-
-    def add_thing(self,thing:Thing):
-        self.__check_weight(thing.weight)
-        return self.things.append(thing)
 
 
     def check(self,k):
         if type(k)!=int or not(0<=k<=len(self.things)):
-            raise IndexError('hj')
+            raise IndexError('неверный индекс')
+
+
+    def add_thing(self,thing:Thing):
+        self.__check_weight(thing)
+        self.things.append(thing)
+        self.__weight+=thing.weight
 
 
     def __getitem__(self,item):
@@ -31,14 +34,15 @@ class Bag:
 
     def __setitem__(self,key,value:Thing):
         self.check(key)
-        q=value.weight-self.things[key].weight
-        self.__check_weight(q)
-        print('oooooo')
+        t=self.things[key]
+        self.__check_weight(value,t)        
         self.things[key]=value
+        self.__weight+=(value.weight-t.weight)
 
     def __delitem__(self,item):
         self.check(item)
-        del self.things[item]
+        t=self.things.pop(item)
+        self.__weight-=t.weight
 
 
 b = Bag(700)
