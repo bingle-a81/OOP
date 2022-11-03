@@ -12,4 +12,6 @@ fiind = lambda x, q: x[x.find(q):x.find(q)] if q in x else -1
 f=[letters_amazon.find('SQL'),letters_amazon.find('SQL')]
 print(f)
 
-# print(fiind(letters_amazon, 'SQL'))
+print(fiind(letters_amazon, 'SQL'))
+
+
