@@ -1,17 +1,15 @@
-letters_amazon = '''
-We spent several years building our own database engine,
-Amazon Aurora, a fully-managed MySQL and PostgreSQL-compatible
-service with the same or better durability and availability as
-the commercial engines, but at one-tenth of the cost. We were
-not surprised when this worked.
-'''
+lst_1 = [1, 2, 3]
+lst_2 = [4, 5, 6]
+# Упаковка двух списков вместе
+zipped = list(zip(lst_1, lst_2))
+print(zipped)
+# [(1, 4), (2, 5), (3, 6)]
+# Обратная распаковка списков
+lst_1_new, lst_2_new = zip(*zipped)
+print(list(lst_1_new))
+print(list(lst_2_new))
 
+f=[(1,2,3,4),(1,2,3,4),(1,2,3,4)]
+a,b,c,d=zip(*f)
 
-fiind = lambda x, q: x[x.find(q):x.find(q)] if q in x else -1
-
-f=[letters_amazon.find('SQL'),letters_amazon.find('SQL')]
-print(f)
-
-print(fiind(letters_amazon, 'SQL'))
-
-
+print(a,b,c,d)
