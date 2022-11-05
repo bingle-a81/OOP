@@ -13,3 +13,5 @@ f=[(1,2,3,4),(1,2,3,4),(1,2,3,4)]
 a,b,c,d=zip(*f)
 
 print(a,b,c,d)
+
+print(list(range(10)))
