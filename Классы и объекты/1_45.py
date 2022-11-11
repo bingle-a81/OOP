@@ -1,29 +1,15 @@
-class Clock:
-    def __init__(self,h,m,s) -> None:
-        self.hour=h
-        self.minute=m
-        self.second=s
+r,c=5,5
+matrix=[[0 for x in range(c)] for y in range(r)]
 
-    def get_time(self):
-        return sum(x for x in [self.hour*3600,self.minute*60,self.second])
+dx,dy,x,y=0,1,0,0
 
+for i in range(1,r*c+1):
+    matrix[x][y]=i
+    if matrix[(dx+x)%r][(dy+y)%c]:
+        dx,dy=dy,-dx
+    x+=dx
+    y+=dy
 
-class DeltaClock:
-    def __init__(self,cl1:Clock,cl2:Clock) -> None:
-        self.clock1=cl1
-        self.clock2=cl2
-
-    def __len__(self):
-        res=self.clock1.get_time-self.clock2.get_time
-        return res if res>0 else 0
-
-    def __repr__(self) -> str:
-        d=self.__len__()
-        h=d//3600
-        m=d%3600//60
-        s=d%3600%60
-        return f'{h:02}:{m:02}:{s:02}'
-
-
-c=Clock(1,2,3)
-print(c.get_time())
+for line in matrix:
+    print(*(f'{i:<3}' for i in line), sep='')
+    
