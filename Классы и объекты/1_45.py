@@ -1,6 +1,5 @@
-a=('a','b','c')
-b=('1','2','3')
-c=list(zip(a,b))
-print(c)
-
-
+class HH:
+    id=0
+    def __init__(self):
+        self.__class__.id+=1
+        self.id=self.__class__.id
